@@ -85,7 +85,6 @@ void loop() {
       client.loop();
       // Lectura del PIR
       int pinState = digitalRead(26);
-      // Serial.println(pinState);
       // Si detecta presencia
       if (pinState) {
         Serial.println("Se detectó presencia");
@@ -156,7 +155,6 @@ void loop() {
         break;
       }
       if (respuesta == 0) {
-        // Serial.println("Comprobando contraseña");
         break;
       } else if(respuesta == 1){
         Serial.println("Contraseña correcta");
@@ -184,41 +182,4 @@ void loop() {
       break;
     }
   }
-}
-
-void reconnect() {
-  while (!client.connected()) {
-    Serial.println("Conectando al servidor MQTT...");
-
-    if (client.connect("NodeMCU", mqttUser, mqttPassword)) {
-      Serial.println("Conexión al servidor MQTT establecida!");
-      client.subscribe(topicEstadoClave);
-    } else {
-      Serial.print("Error al conectar al servidor MQTT. Estado: ");
-      Serial.println(client.state());
-      delay(2000);
-    }
-  }
-}
-
-void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Mensaje recibido en el topic: ");
-  Serial.println(topic);
-
-  // Convertir el payload a un String
-  String message = "";
-  for (int i = 0; i < length; i++) {
-    message += (char)payload[i];
-  }
-  if (message == "OK") {
-    respuesta = 1;
-  } else if (message == "NO") {
-    respuesta = 2;
-  } else {
-    respuesta = 2;
-  }
-  Serial.print("Contenido del mensaje: ");
-  Serial.println(message);
-
-  // Aquí puedes incluir tu lógica para procesar el mensaje recibido en el topic "estado-clave"
 }
